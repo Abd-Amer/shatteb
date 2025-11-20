@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  web:
+    image: drupal:11-apache
+    container_name: shatteb-web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    volumes:
+      - ./web:/var/www/html
+
+  db:
+    image: mariadb:10.11
+    container_name: shatteb-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: shatteb
+      MYSQL_USER: shatteb
+      MYSQL_PASSWORD: shatteb
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: shatteb-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+#webmaster
+#shatteb@1234
